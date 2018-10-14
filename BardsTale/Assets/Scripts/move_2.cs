@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class move_2 : MonoBehaviour {
 
+    int speed = 8;
+
 	// Use this for initialization
 	void Start () {
 		
@@ -21,19 +23,19 @@ public class move_2 : MonoBehaviour {
         {
             if (Input.GetKey(static_information.controls[1]))
             {
-                new_position.x -= 0.1f;
+                new_position.x -= 1f * speed;
             }
             if (Input.GetKey(static_information.controls[3]))
             {
-                new_position.x += 0.1f;
+                new_position.x += 1f * speed;
             }
             if (Input.GetKey(static_information.controls[2]))
             {
-                new_position.y -= 0.1f;
+                new_position.y -= 1f * speed;
             }
             if (Input.GetKey(static_information.controls[0]))
             {
-                new_position.y += 0.1f;
+                new_position.y += 1f * speed;
             }
             transform.position = new_position;
         }
