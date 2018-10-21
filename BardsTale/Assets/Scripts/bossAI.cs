@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class bossAI : MonoBehaviour {
+public class bossAI : MonoBehaviour
+{
 
     //stats
     public int maxHealth = 100;
@@ -13,8 +14,8 @@ public class bossAI : MonoBehaviour {
     private float speed = 1f;
     private float attackTimer = 1.5f;
 
-    private float baseAbilityCooldown = 10f;
-    private float abilityCooldown = 10f;
+    private float baseAbilityCooldown = 6f;
+    private float abilityCooldown = 6f;
 
     public Slider healthBar;
 
@@ -22,14 +23,17 @@ public class bossAI : MonoBehaviour {
 
     private int dir = 2;
 
+    public Rigidbody2D projectile;
 
     // Use this for initialization
-    void Start () {
+    void Start()
+    {
 
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+    // Update is called once per frame
+    void Update()
+    {
         if (!static_information.isPaused)
         {
             if (health == 0)
@@ -38,13 +42,12 @@ public class bossAI : MonoBehaviour {
 
             healthBar.value = health;
 
-            abilityCooldown = baseAbilityCooldown - (maxHealth - health) / 20f;
-
+            //abilityCooldown = baseAbilityCooldown - (maxHealth - health) / 20f;
 
             if (attackTimer > 0)
                 attackTimer -= Time.deltaTime;
             if (abilityCooldown > 0)
-                attackTimer -= Time.deltaTime;
+                abilityCooldown -= Time.deltaTime+(maxHealth-health)/maxHealth/2;
 
 
             if (attackTimer <= 0)
@@ -55,11 +58,12 @@ public class bossAI : MonoBehaviour {
 
             //if (phase == 1)
             //{
-                if (abilityCooldown <= 0)
-                    spawnMinion(phase);
+            if (abilityCooldown <= 0)
+                spawnProjectile(phase);
+            print("Ability CD: " + abilityCooldown);
 
-                //speed = baseSpeed + (maxHealth - health)/45f;
-                AttemptMove(BossAI());
+            //speed = baseSpeed + (maxHealth - health)/45f;
+            AttemptMove(BossAI());
             //}
             /* if (phase == 2)
             {
@@ -68,10 +72,10 @@ public class bossAI : MonoBehaviour {
 
                 //speed = baseSpeed + (maxHealth - health) / 45f;
                 AttemptMove(BossAI());
-            }  */        
+            }  */
         }
     }
-    public float [] BossAI()
+    public float[] BossAI()
     {
         float yDir;
         float xDir;
@@ -90,10 +94,10 @@ public class bossAI : MonoBehaviour {
 
         return movement;
     }
-    public void AttemptMove (float [] movement)
+    public void AttemptMove(float[] movement)
     {
-        
-        Vector2 new_position = new Vector2(transform.position.x+movement[0], transform.position.y+movement[1]);
+
+        Vector2 new_position = new Vector2(transform.position.x + movement[0], transform.position.y + movement[1]);
 
         transform.position = new_position;
     }
@@ -103,12 +107,19 @@ public class bossAI : MonoBehaviour {
         health -= damage;
     }
 
-    public void spawnMinion(int n)
+    public void spawnProjectile(int n)
     {
         for (int i = 0; i < n; i++)
         {
-
+            print("Spawning Projectile");
+            Rigidbody2D projectileClone = (Rigidbody2D)Instantiate(projectile, transform.position, transform.rotation);
         }
+        abilityCooldown = 10f;
     }
 
+    void OnCollisionEnter2D(Collision2D col)
+    {
+        //print("BossBoi");
+
+    }
 }

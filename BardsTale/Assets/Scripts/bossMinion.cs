@@ -9,11 +9,8 @@ public class bossMinion : MonoBehaviour {
     public int health = 1;
     public int damage = 1;
     private float baseSpeed = 2f;
-    private float speed = 2f;
+    private float speed = 2.5f;
     private float attackTimer = 1.5f;
-
-
-    private int phase = 1;
 
     private int dir = 2;
 
@@ -29,11 +26,6 @@ public class bossMinion : MonoBehaviour {
     {
         if (!static_information.isPaused)
         {
-            bossAI Boss = GameObject.Find("Boss").GetComponent<bossAI>();
-            if (health == 0)
-                Destroy(this.gameObject);
-            //Do death animation
-
 
             if (attackTimer > 0)
                 attackTimer -= Time.deltaTime;
@@ -41,8 +33,6 @@ public class bossMinion : MonoBehaviour {
 
             if (attackTimer <= 0)
                 ; //Deal damage if touching bard
-
-            speed = baseSpeed + (Boss.maxHealth - Boss.health) / 75f;
             AttemptMove(movementAI());
         }
     }
@@ -50,17 +40,15 @@ public class bossMinion : MonoBehaviour {
     {
         float yDir;
         float xDir;
-        if (dir == 5)
-            dir = 1;
 
-        if (dir == 1 || dir == 2)
-            yDir = 1f * speed;
-        else
-            yDir = -1f * speed;
-        if (dir == 1 || dir == 4)
-            xDir = 1f * speed;
-        else
-            xDir = -1f * speed;
+        float px = GameObject.Find("Guy").transform.position.x;
+        float py = GameObject.Find("Guy").transform.position.y;
+        float bx = transform.position.x;
+        float by = transform.position.y;
+
+
+        xDir = (bx > px) ? xDir = -1 * speed : xDir = 1 * speed;
+        yDir = (by > py) ? yDir = -1 * speed : yDir = 1 * speed;
 
 
         float[] movement = { xDir, yDir };
@@ -72,40 +60,6 @@ public class bossMinion : MonoBehaviour {
 
         Vector2 new_position = new Vector2(transform.position.x + movement[0], transform.position.y + movement[1]);
 
-        if (new_position[0] < 20)
-        {
-            if (dir == 2)
-                dir = 1;
-            else
-                dir = 4;
-            return;
-        }
-        if (new_position[0] > Camera.main.pixelWidth - 20)
-        {
-            if (dir == 1)
-                dir = 2;
-            else
-                dir = 3;
-            return;
-        }
-        if (new_position[1] < 50)
-        {
-            if (dir == 4)
-                dir = 1;
-            else
-                dir = 2;
-            return;
-        }
-        if (new_position[1] > Camera.main.pixelHeight - 50)
-        {
-            if (dir == 1)
-                dir = 4;
-            else
-                dir = 3;
-            return;
-        }
-
-
         transform.position = new_position;
     }
 
@@ -116,14 +70,8 @@ public class bossMinion : MonoBehaviour {
 
     void OnCollisionEnter2D(Collision2D col)
     {
-        print("bish");
-        move_2 playerCol = col.gameObject.GetComponent<move_2>();
-
-        //Checks to see if it hit player mover
-        if (playerCol != null)
-        {
-            print("PLAYER HIT");
-            Destroy(this.gameObject);
-        }
+        print("Destroying Egg and spawning skele");
+        //col.gameObject.GetComponent<bossProjectile>.
+        Destroy(col.gameObject);
     }
 }

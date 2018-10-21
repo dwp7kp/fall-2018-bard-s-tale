@@ -40,4 +40,19 @@ public class move_2 : MonoBehaviour {
             transform.position = new_position;
         }
     }
+
+    void OnCollisionEnter2D(Collision2D col)
+    {
+        //print("Player");
+        if (col.gameObject.tag == "Enemy")
+        {
+            //take damage
+        }
+        if (col.gameObject.tag == "Boss")
+        {
+            //take damage
+        }
+
+        
+    }
 }
