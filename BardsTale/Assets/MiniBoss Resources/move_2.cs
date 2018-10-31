@@ -43,7 +43,6 @@ public class move_2 : MonoBehaviour {
 
     void OnCollisionEnter2D(Collision2D col)
     {
-        //print("Player");
         if (col.gameObject.tag == "Enemy")
         {
             //take damage

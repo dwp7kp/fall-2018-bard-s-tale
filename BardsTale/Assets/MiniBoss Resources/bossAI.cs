@@ -15,7 +15,7 @@ public class bossAI : MonoBehaviour
     private float attackTimer = 1.5f;
 
     private float baseAbilityCooldown = 6f;
-    private float abilityCooldown = 6f;
+    private float abilityCooldown = 2f;
 
     public Slider healthBar;
 
@@ -42,7 +42,6 @@ public class bossAI : MonoBehaviour
 
             healthBar.value = health;
 
-            //abilityCooldown = baseAbilityCooldown - (maxHealth - health) / 20f;
 
             if (attackTimer > 0)
                 attackTimer -= Time.deltaTime;
@@ -56,23 +55,14 @@ public class bossAI : MonoBehaviour
             if (health == maxHealth / 2)
                 phase = 2;
 
-            //if (phase == 1)
-            //{
             if (abilityCooldown <= 0)
-                spawnProjectile(phase);
-            print("Ability CD: " + abilityCooldown);
-
-            //speed = baseSpeed + (maxHealth - health)/45f;
-            AttemptMove(BossAI());
-            //}
-            /* if (phase == 2)
             {
-                if (abilityCooldown <= 0)
-                    spawnMinion(phase);
+                spawnProjectile(phase);
+                abilityCooldown = baseAbilityCooldown - (maxHealth - health) / 20f;
+            }
+            //print("Ability CD: " + abilityCooldown);
 
-                //speed = baseSpeed + (maxHealth - health) / 45f;
-                AttemptMove(BossAI());
-            }  */
+            AttemptMove(BossAI());
         }
     }
     public float[] BossAI()
@@ -113,6 +103,7 @@ public class bossAI : MonoBehaviour
         {
             print("Spawning Projectile");
             Rigidbody2D projectileClone = (Rigidbody2D)Instantiate(projectile, transform.position, transform.rotation);
+            projectileClone.GetComponent<bossProjectile>().isActive = true;
         }
         abilityCooldown = 10f;
     }

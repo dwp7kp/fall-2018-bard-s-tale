@@ -8,17 +8,19 @@ public class bossMinion : MonoBehaviour {
     public int maxHealth = 1;
     public int health = 1;
     public int damage = 1;
-    private float baseSpeed = 2f;
-    private float speed = 2.5f;
+    private float speed = 1.8f;
     private float attackTimer = 1.5f;
 
     private int dir = 2;
+    private bossAI Boss;
 
+    //I use this bool to make sure the minion original prefab is not moving
+    public bool isActive = false;
 
-    // Use this for initialization
     void Start()
     {
-
+        //Reference to boss is used to know if fight is over
+        Boss = GameObject.Find("Boss").GetComponent<bossAI>();
     }
 
     // Update is called once per frame
@@ -26,14 +28,19 @@ public class bossMinion : MonoBehaviour {
     {
         if (!static_information.isPaused)
         {
+            if (isActive)
+            {
+                if (Boss.health == 0)
+                    Destroy(this.gameObject);
 
-            if (attackTimer > 0)
-                attackTimer -= Time.deltaTime;
+                if (attackTimer > 0)
+                    attackTimer -= Time.deltaTime;
 
 
-            if (attackTimer <= 0)
-                ; //Deal damage if touching bard
-            AttemptMove(movementAI());
+                if (attackTimer <= 0)
+                    ; //Deal damage if touching bard
+                AttemptMove(movementAI());
+            }
         }
     }
     public float[] movementAI()
@@ -70,8 +77,9 @@ public class bossMinion : MonoBehaviour {
 
     void OnCollisionEnter2D(Collision2D col)
     {
-        print("Destroying Egg and spawning skele");
-        //col.gameObject.GetComponent<bossProjectile>.
-        Destroy(col.gameObject);
+        if (col.gameObject.tag == "Player")
+        {
+            //take damage
+        }
     }
 }
